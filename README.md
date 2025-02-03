@@ -2,6 +2,7 @@ A lightweight, minimal, statically compiled blog.
 - [`staticjinja`](https://staticjinja.readthedocs.io/) for static compilation/watching
 - [Jinja](https://jinja.palletsprojects.com/en/stable/) for templating
 - [Python-Markdown](https://python-markdown.github.io/) for markdown -> HTML
+- [PyYAML](https://pypi.org/project/PyYAML/) for YAML
 
 # Setup
 ```
@@ -18,3 +19,10 @@ Build settings can be found in the bottom of `build.py`.
 - source files live in `src/`
 - render files live in `build/`
 - static files live in `public/` # TODO
+
+## Markdown compilation
+Markdown files are automatically categorized by subdirectory, and compiled to HTML template partials matching their subdirectory name. This behavior is described in the `render_md` function in `build.py`.
+- For example, `src/posts/post1.md` will look for a template at `src/_posts.html`.
+- Top level md files, e.g. `src/*.md`, will use `src/__toplevel.html`.
+
+YAML front matter is parsed out of the tops of Markdown source files usings `PyYAML`.

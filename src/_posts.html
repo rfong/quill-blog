@@ -8,6 +8,8 @@
     <br>
     date: {{ date_published | datetime_format }}
     <br>
+    tags: {{ tags | join(", ") }}
+    <br>
     {{ post_content_html }}
   </body>
 </html>

@@ -9,6 +9,7 @@ import shutil
 
 import markdown
 from staticjinja import Site
+import yaml  # PyYAML
 
 
 # Matches a file prepended with %Y-%m-%d date, e.g. 2025-02-03-file.md
@@ -30,13 +31,40 @@ def get_file_date(template):
 
 def md_context(template):
   '''Return context-aware metadata to annotate onto markdown templates.'''
-  return {
-    "post_content_html": markdowner.convert(
-      Path(template.filename).read_text()
-    ),
+  content = Path(template.filename).read_text()
+  # Extract YAML front matter, if any
+  YAML_SEP = "---\n"
+  content = content.split(YAML_SEP)
+  context = {}
+  if len(content) >= 3:
+    try:
+      context = parse_front_matter(content[1])
+      print("front matter:", context)
+      content = content[2:]
+    except yaml.YAMLError as exc:
+      print("Error while parsing YAML front matter in %s" % template.name)
+      print(exc)
+
+  md_content = YAML_SEP.join(content)
+
+  context.update({
+    "post_content_html": markdowner.convert(md_content),
     "date_published": get_file_date(template),
     "category": get_page_category(template),
-   }
+  })
+  return context
+
+def parse_front_matter(front_matter):
+  '''
+  Clean or parse any front matter that is expected in a specific format.
+  Note that these keys will clobber any other keys in the context!
+  TODO: make HTML safe
+  '''
+  data = yaml.safe_load(front_matter)
+  if "tags" in data:
+    data["tags"] = data["tags"].split(", ")
+    # TODO: only allow a restricted character set?
+  return data
 
 def get_page_category(template):
   '''The page category is the name of the first subdirectory'''
@@ -85,3 +113,5 @@ if __name__ == "__main__":
   )
   # enable automatic reloading
   site.render(use_reloader=True)
+  # newline to separate outputs from different builds
+  print()
