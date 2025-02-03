@@ -26,3 +26,10 @@ Markdown files are automatically categorized by subdirectory, and compiled to HT
 - Top level md files, e.g. `src/*.md`, will use `src/__toplevel.html`.
 
 YAML front matter is parsed out of the tops of Markdown source files usings `PyYAML`.
+
+## Tags
+`tags` are automatically parsed from YAML front matter and compiled to `build/tag/<tag_name>/index.html` as pages that display all posts tagged with that tag.
+
+As an intermediate build step, `render_md(...)` generates tag files in `src/tags/`. These are compiled using the template at `src/_tags.html`.
+
+Note that the approach is lazy about cleanup, and will not delete empty tag files on render autoreload. For a clean build, quit and rerun the watch command.

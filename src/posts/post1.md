@@ -1,3 +1,7 @@
+---
+tags: tag1
+---
+
 # Post Title
 
 Here's some nice stuff that you want to blog about!
