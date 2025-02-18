@@ -1,6 +1,7 @@
 ---
 tags: features, tag with spaces and cAsES, punct.**uat&&io?!!n
-title: Post with lots of tags. Also date in filename.
+title: Tags and dates
+description: Post with lots of tags. Also date in filename.
 ---
 
 ## Date

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+
+<channel>
+
+<title>{{siteConfig.title}}</title>
+<link>{{siteConfig.url}}</link>
+<description>{{siteConfig.description}}</description>
+
+{% for post in posts %}
+<item>
+<title>{{post.title}}</title>
+<link>{{siteConfig.domain}}{{post.url}}</link>
+<description>{{post.description}}</description>
+</item>
+{% endfor %}
+
+</channel>
+</rss>

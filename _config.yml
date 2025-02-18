@@ -1,5 +1,6 @@
 title: Example longform blog
+url: https://localhost:8080
 baseurl: /
+description: This is a longform theme example for my lightweight blogging framework.
 
-feed:
-  path: feed.xml
+feed: feed.xml

@@ -77,7 +77,7 @@ def md_context(template, norender=False):
     context = {}
 
   if template.name.startswith("index."):
-    context.update(index_context(template))
+    context.update(summary_context(template))
 
   if norender is False:
     context["post_content_html"] = markdowner.convert(content)
@@ -86,12 +86,26 @@ def md_context(template, norender=False):
   context.update({
     "date": context.get("date", get_file_date(template)),
     "category": get_page_category(template),
-    "site_title": site_config.get("title"),
+    "siteConfig": site_context(),
   })
   return context
 
-def index_context(template):
-  '''Return additional context-aware metadata for index page.'''
+def site_context():
+  return {
+    "title": site_config.get("title"),
+    "description": site_config.get("description"),
+    "url": site_config.get("url") + site_config.get("baseurl"),
+    "domain": site_config.get("url"),
+  }
+
+def rss_context(template):
+  return dict(
+    **summary_context(template),
+    **{"siteConfig": site_context()},
+  )
+
+def summary_context(template):
+  '''Return additional context-aware metadata for summaries.'''
   data = {}
   for cat in COLLECT_CATEGORIES: 
     # Grab all markdown source paths in this category
@@ -131,6 +145,19 @@ def render_md(site, template, **kwargs):
   # If it's a post, then index.md post index needs to be re-rendered too.
   if pgCat == "posts":
     rerender("index.md")
+
+def render_rss(site, template, **kwargs):
+  '''Render RSS XML feed'''
+  print()
+
+  # Get output filepath
+  out = Path(os.path.join(site.outpath, site_config.get("feed", "feed.xml")))
+  print("RSS OUTPUT PATH:", out)
+
+  # Compile and stream the result
+  os.makedirs(out.parent, exist_ok=True)
+  site.get_template(TEMPLATES_DIR + "/feed.xml").stream(**kwargs)\
+    .dump(str(out), encoding="utf-8")
 
 def render_tag(site, template, **kwargs):
   '''Tag page render'''
@@ -327,6 +354,7 @@ if __name__ == "__main__":
     pass
 
   site_config = load_config()
+  print("site config:", site_config)
 
   # Build site
   site = Site.make_site(
@@ -339,10 +367,12 @@ if __name__ == "__main__":
     contexts=[
       (r".*\.md", md_context),
       (r"tags\/.*", tag_context),
+      (r"rss.html", rss_context),
     ],
     rules=[
       (r".*\.md", render_md),
       (r"tags\/.*", render_tag),
+      (r"rss.html", render_rss),
     ],
     # Custom Jinja filters
     filters={

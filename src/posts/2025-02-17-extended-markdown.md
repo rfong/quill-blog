@@ -1,6 +1,7 @@
 ---
 tags: features
-title: Footnotes, code blocks, other extended Markdown
+title: Extended Markdown
+description: Footnotes, code blocks, table of contents, tables
 ---
 
 ### Table of contents
