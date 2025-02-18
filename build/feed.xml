@@ -21,6 +21,12 @@
 </item>
 
 <item>
+<title>image test</title>
+<link>https://localhost:8080/posts/2025-02-18-image.html</link>
+<description>here's an image</description>
+</item>
+
+<item>
 <title>Extended Markdown</title>
 <link>https://localhost:8080/posts/2025-02-17-extended-markdown.html</link>
 <description>Footnotes, code blocks, table of contents, tables</description>
