@@ -14,7 +14,7 @@ import yaml  # PyYAML
 
 
 ########################################
-# Constants 
+# Constants
 
 # YAML front matter separator
 YAML_SEP = "---\n"
@@ -23,7 +23,7 @@ YAML_SEP = "---\n"
 FILE_DATE_REGEX = re.compile("(\d{4}-\d{2}-\d{2}).*\..*")
 
 # Regex of what to strip from tags.
-# We can't use a simple latin alphabet [a-z0-9] exclusion because it doesn't 
+# We can't use a simple latin alphabet [a-z0-9] exclusion because it doesn't
 # support other languages.
 TAG_STRIP_REGEX = re.compile("[\s\"\'\(\)\+\,\-\/\:\;\<\=\>\[\]\_\`\{\|\}\~\/\!\@\#\$\%\^\&\*\.\?]+")
 
@@ -33,7 +33,10 @@ TAG_STRIP_REGEX = re.compile("[\s\"\'\(\)\+\,\-\/\:\;\<\=\>\[\]\_\`\{\|\}\~\/\!\
 
 markdowner = markdown.Markdown(
   output_format="html5",
-  extensions=["extra", "admonition", "codehilite", "nl2br", "sane_lists", "smarty", "toc"],
+  extensions=[
+    "extra", "admonition", "codehilite", "nl2br", "sane_lists", "smarty",
+    "toc",
+  ],
 )
 
 def tag_context(template):
@@ -47,7 +50,7 @@ def tag_context(template):
 def md_context(template, norender=False):
   '''
   Return context-aware metadata to annotate onto markdown templates.
-  If norender==True, only return summary context rather than all the context 
+  If norender==True, only return summary context rather than all the context
   needed to render.
   '''
   content = Path(template.filename).read_text()
@@ -95,7 +98,7 @@ def render_md(site, template, **kwargs):
   # Get output filepath
   out = Path(os.path.join(site.outpath, get_build_path(template.name)))
 
-  # Template = _templates/{category}.html, or _templates/index.html if no category
+  # Template = _templates/{category}.html, or _templates/index.html if none
   pgCat = get_page_category(template)
   templateName = ( \
     "_templates/{0}.html".format(get_page_category(template)) \
@@ -105,7 +108,8 @@ def render_md(site, template, **kwargs):
 
   # Compile and stream the result
   os.makedirs(out.parent, exist_ok=True)
-  site.get_template(templateName).stream(**kwargs).dump(str(out), encoding="utf-8")
+  site.get_template(templateName).stream(**kwargs)\
+    .dump(str(out), encoding="utf-8")
 
   # If it's a post, then index.md post index needs to be re-rendered too.
   if pgCat == "posts":
@@ -118,12 +122,15 @@ def render_tag(site, template, **kwargs):
 
   # Output path transform, i.e. tag/mytag.md -> build/tag/mytag/index.html
   out = Path(os.path.join(
-    site.outpath, "tag", get_basename_without_ext(template.name), "index.html"))
+    site.outpath, "tag", get_basename_without_ext(template.name),
+    "index.html"),
+  )
   print("tag output path:", out)
 
   # Compile and stream the result
   os.makedirs(out.parent, exist_ok=True)
-  site.get_template("_templates/tags.html").stream(**kwargs).dump(str(out), encoding="utf-8")
+  site.get_template("_templates/tags.html").stream(**kwargs)\
+    .dump(str(out), encoding="utf-8")
 
 
 ########################################
@@ -188,12 +195,12 @@ def get_paths_with_tag(tag):
 
 def get_pages_with_tag(tag):
   '''
-  Return metadata on pages associated with a tag. 
+  Return metadata on pages associated with a tag.
   '''
   sourcePaths = get_paths_with_tag(tag)
   print("TAG SOURCE PATHS:", sourcePaths)
   return [
-    dict( 
+    dict(
       **{"url": get_relative_path(get_build_path(path))},
       **md_context(site.get_template(path), norender=True),
     ) for path in sourcePaths
@@ -208,7 +215,7 @@ def get_relative_path(path):
 
 def associate_page_tag(srcPath, tag):
   '''
-  Associate a page with a tag by writing its relative source path to an 
+  Associate a page with a tag by writing its relative source path to an
   intermediate file.
   '''
   tag_path = get_tag_path(tag)
