@@ -10,7 +10,7 @@
 {% for post in posts %}
 <item>
 <title>{{post.title}}</title>
-<link>{{siteConfig.domain}}{{post.url}}</link>
+<link>{{ siteConfig.domain | trim(chars="/") }}{{post.url}}</link>
 <description>{{post.description}}</description>
 </item>
 {% endfor %}
