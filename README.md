@@ -103,4 +103,6 @@ pygmentize -S default -f html -a .codehilite >> public/codehilite.css
 
 # Todo
 
-- [ ] Clean up the CSS files with Sass
+- [ ] clean up the CSS files with Sass
+- [ ] there's probably a better way to do static compilation
+- [ ] static file watcher
