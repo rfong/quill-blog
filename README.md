@@ -24,7 +24,8 @@ pip install -r requirements.txt  # install requirements
 
 ## Make targets
 
-- `env=DEV make watch`: compile with autoreload; set `env=GH` if deploying to GH Pages
+- `make watch`: compile with autoreload in dev env
+- `make build-gh`: rebuild with gh pages config file. very janky
 - `make serve`: serve rendered files on port 8080
 - `make test`: run unit tests
 - `make static`: copy over static files

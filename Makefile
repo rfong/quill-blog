@@ -1,7 +1,11 @@
 # usage: `env=DEV make watch`, `env=GH make watch`, etc.
 watch: static
 	# Run build script
-	python build.py
+	env=DEV python build.py
+
+build-gh:
+	# Rebuild for GH environment
+	env=GH python build.py
 
 static:
 	# Copy over static files
