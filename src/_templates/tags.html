@@ -5,7 +5,7 @@
     {% for page in tagged_pages | sort(attribute="date", reverse=true) %}
     <li>
       <a href="/{{page.url}}">{{page.title}}</a> 
-      <span class="date">- {{ page.date | datetime_format }}</span>
+      <span class="date">- {{ page.date | strftime }}</span>
     </li>
     {% endfor %}
   </ul>

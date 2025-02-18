@@ -5,7 +5,7 @@
   {% for post in posts | sort(attribute="date", reverse=true) %}
     <div class="post-summary">
       <a href="/{{post.url}}">{{post.title}}</a>
-      <span class="date">- {{ post.date | datetime_format }}</span>
+      <span class="date">- {{ post.date | strftime }}</span>
     </div>
   {% endfor %}
 {% endblock %}

@@ -19,6 +19,8 @@
   font-style: italic;
 }
 
+/* OVERRIDES */
+
 .codehilite {
   font-size: 14.5px;
   overflow: scroll;
@@ -30,7 +32,17 @@ th, td {
 
 h1, h2, h3, h4, h5, h6, h7 {
   line-height: 1em;
+  color: #666;
 }
+h1.post-title {
+  color: #000;
+}
+
+code {
+  font-family: 'Courier', monospace;
+}
+
+/* THEME STYLE */
 
 body {
   /*background-color:#f00;*/

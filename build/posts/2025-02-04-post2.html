@@ -9,7 +9,7 @@
     
   <a href="/"><< home</a>
   
-  <h1 class="post-title">Post With Date</h1>
+  <h1 class="post-title">Post with date and lots of tags.</h1>
   <div class="date">2025 February 04</div>
   <div class="tags">tags: 
     
@@ -25,8 +25,19 @@
     
   </div>
   <div class="post-content">
-    <p>Hi! I am a post with title datestamp and front matter.</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec dui a nisi blandit condimentum. Nulla vestibulum enim ac diam porttitor, sed pharetra sapien ornare. Nulla convallis risus at quam vestibulum porta. Suspendisse vehicula, dolor non facilisis euismod, lacus metus consequat risus, sit amet cursus lectus justo non elit. Pellentesque hendrerit mi ac venenatis consequat. Aenean fringilla nunc in erat rhoncus, non aliquet libero scelerisque. Duis ornare eros vel purus lacinia lacinia. Phasellus aliquam felis elit, in auctor sem vehicula id. Vestibulum at tempus nisl, nec dictum lorem. Ut vitae venenatis enim. Aenean vehicula, neque eget congue dictum, odio nibh consectetur magna, vel eleifend sapien risus sed sem.</p>
+    <h2 id="date">Date</h2>
+<p>To annotate a markdown post with a date, prefix the filename with <code>YYYY-MM-DD</code>, for example <code>2025-02-04-post2.md</code>.</p>
+<p>I&rsquo;ve added a custom <a href="https://jinja.palletsprojects.com/en/stable/templates/#filters">Jinja filter</a> <code>strftime</code> to render <code>datetime</code> objects in templates. </p>
+<p>By default, it will render to <code>%Y %B %d</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">{{</span> <span class="nv">date</span> <span class="o">|</span> <span class="nf">strftime</span> <span class="cp">}}</span>
+</code></pre></div>
+
+<p>You can also pass in custom formats using standard <a href="https://strftime.org/">Python <code>strftime</code> notation</a>.</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">{{</span> <span class="nv">date</span> <span class="o">|</span> <span class="nf">strftime</span><span class="o">(</span><span class="s2">&quot;%Y-%m-%d %H:%M:%S&quot;</span><span class="o">)</span> <span class="cp">}}</span>
+</code></pre></div>
+
+<h2 id="tags">Tags</h2>
+<p>Tags are automatically lowercased. Punctuation and whitespace will automatically be parsed out of tags and replaced with hyphens. For example, <code>tag with spaces and cAsES</code> has been cleaned to <code>tag-with-spaces-and-cases</code>, and <code>punct.**uat&amp;&amp;io?!!n</code> has been cleaned to <code>punct-uat-io-n</code>.</p>
   </div>
 
 

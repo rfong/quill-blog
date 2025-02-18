@@ -267,7 +267,7 @@ def touch_file(path):
 def get_basename_without_ext(path):
   return os.path.splitext(os.path.basename(path))[0]
 
-def datetime_format_filter(value, format="%Y %B %d"):
+def strftime_filter(value, format="%Y %B %d"):
   '''Datetime formatting filter function for Jinja templating.'''
   return value.strftime(format)
 
@@ -306,7 +306,7 @@ if __name__ == "__main__":
     ],
     # Custom Jinja filters
     filters={
-      "datetime_format": datetime_format_filter,
+      "strftime": strftime_filter,
     },
     # Global variables to make available in templates
     env_globals={
