@@ -31,7 +31,7 @@ TAG_STRIP_REGEX = re.compile("[\s\"\'\(\)\+\,\-\/\:\;\<\=\>\[\]\_\`\{\|\}\~\/\!\
 ########################################
 # Staticjinja callbacks -- rendering and context annotation
 
-markdowner = markdown.Markdown(output_format="html5")
+markdowner = markdown.Markdown(output_format="html5", extensions=["footnotes"])
 
 def tag_context(template):
   '''Return context_aware metadata to annotate onto tag pages.'''
@@ -61,6 +61,7 @@ def md_context(template, norender=False):
 
   if norender is False:
     context["post_content_html"] = markdowner.convert(content)
+    markdowner.reset()
 
   context.update({
     "date": get_file_date(template),
