@@ -1,4 +1,12 @@
 {% extends "_templates/base.html" %}
 {% block content %}
-  pages tagged with "{{ tag }}": {{ tagged_pages }}
+  <h1>Posts tagged with "{{ tag }}"</h1>
+  <ul>
+    {% for page in tagged_pages | sort(attribute="date", reverse=true) %}
+    <li>
+      <a href="/{{page.url}}">{{page.title}}</a> 
+      <span class="date">- {{ page.date | datetime_format }}</span>
+    </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

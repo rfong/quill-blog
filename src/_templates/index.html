@@ -2,9 +2,10 @@
 {% block wrapped_content %}
   {{ post_content_html }}
   <h2>Posts</h2>
-  {% for post in posts %}
+  {% for post in posts | sort(attribute="date", reverse=true) %}
     <div class="post-summary">
       <a href="/{{post.url}}">{{post.title}}</a>
+      <span class="date">- {{ post.date | datetime_format }}</span>
     </div>
   {% endfor %}
 {% endblock %}

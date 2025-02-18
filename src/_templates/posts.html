@@ -1,7 +1,7 @@
 {% extends "_templates/base.html" %}
 {% block content %}
   <h1 class="post-title">{{ title }}</h1>
-  <div class="date">{{ date_published | datetime_format }}</div>
+  <div class="date">{{ date | datetime_format }}</div>
   <div class="tags">tags: 
     {% for tag in tags %}
       <a class="tag" href="/tag/{{tag}}">{{tag}}</a>

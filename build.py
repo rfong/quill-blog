@@ -41,10 +41,16 @@ def tag_context(template):
     "tagged_pages": get_pages_with_tag(tag),
   }
 
-def md_context(template):
-  '''Return context-aware metadata to annotate onto markdown templates.'''
+def md_context(template, norender=False):
+  '''
+  Return context-aware metadata to annotate onto markdown templates.
+  If norender==True, only return summary context rather than all the context 
+  needed to render.
+  '''
   content = Path(template.filename).read_text()
   context = get_front_matter(template.filename)
+  if norender is False:
+    update_tags(template.filename, context)
   if context is not None:
     content = YAML_SEP.join(content.split(YAML_SEP)[2:])
   else:
@@ -53,20 +59,24 @@ def md_context(template):
   if template.name.startswith("index."):
     context.update(index_context(template))
 
+  if norender is False:
+    context["post_content_html"] = markdowner.convert(content)
+
   context.update({
-    "post_content_html": markdowner.convert(content),
-    "date_published": get_file_date(template),
+    "date": get_file_date(template),
     "category": get_page_category(template),
   })
   return context
 
 def index_context(template):
   '''Return additional context-aware metadata for index page.'''
-  srcPaths = glob.glob("src/posts/*.md")
+  srcPaths = [
+    path.removeprefix("src/")
+    for path in glob.glob("src/posts/*.md")]
   posts = [
     dict(
-      **{"url": get_build_path("/".join(path.split("/")[1:]))},
-      **get_front_matter(os.path.join(os.getcwd(), path)),
+      **{"url": get_build_path(path)},
+      **md_context(site.get_template(path), norender=True),
     ) for path in srcPaths
   ]
   return {
@@ -143,7 +153,7 @@ def get_front_matter(filename):
 
 def parse_front_matter(srcPath, front_matter):
   '''
-  Clean or parse any front matter that is expected in a specific format.
+  Handle front matter and update tag files.
   Note that these keys will clobber any other keys in the context!
   '''
   data = yaml.safe_load(front_matter)
@@ -152,16 +162,18 @@ def parse_front_matter(srcPath, front_matter):
     data["tags"] = [
       re.sub(TAG_STRIP_REGEX, "-", tag.lower())  # also lowercase
       for tag in data["tags"].split(", ")]
-    # Update tag files
-    for tag in data["tags"]:
-      associate_page_tag(srcPath, tag)
-
   return data
 
-def get_pages_with_tag(tag):
+def update_tags(srcPath, front_matter):
+  '''Update intermediate tag files for any tags associated with this path.'''
+  print("update tags for", srcPath, front_matter)
+  if front_matter and "tags" in front_matter:
+    for tag in front_matter["tags"]:
+      associate_page_tag(srcPath, tag)
+
+def get_paths_with_tag(tag):
   '''
-  Return the list of pages associated with a tag. 
-  Tracked in intermediate file.
+  Just get list of source paths associated with a tag.
   '''
   with open(get_tag_path(tag), "r") as tagfile:
     return [
@@ -169,28 +181,43 @@ def get_pages_with_tag(tag):
       for x in tagfile.readlines()
       if x
     ]
-    '''
-    list(filter(
-      lambda x: x,
-      Path(template.filename).read_text().split("\n")
-    ))
-    '''
+
+def get_pages_with_tag(tag):
+  '''
+  Return metadata on pages associated with a tag. 
+  '''
+  sourcePaths = get_paths_with_tag(tag)
+  print("TAG SOURCE PATHS:", sourcePaths)
+  return [
+    dict( 
+      **{"url": get_relative_path(get_build_path(path))},
+      **md_context(site.get_template(path), norender=True),
+    ) for path in sourcePaths
+  ]
+
+def get_relative_path(path):
+  '''
+  Get path relative to either the source or build directory.
+  '''
+  return path.removeprefix(os.getcwd()+"/src/")\
+    .removeprefix(os.getcwd()+"/build/")
 
 def associate_page_tag(srcPath, tag):
   '''
-  Associate a page with a tag by writing its name to an intermediate file.
+  Associate a page with a tag by writing its relative source path to an 
+  intermediate file.
   '''
   tag_path = get_tag_path(tag)
   touch_file(tag_path)
   # Get list of currently associated pages
-  pages = get_pages_with_tag(tag)
+  pages = get_paths_with_tag(tag)
   # Add this page and deduplicate
-  pages.append(get_build_path(srcPath))
+  pages.append(get_relative_path(srcPath))
   pages = list(set(pages))
   # Rewrite the tag file with the updated set
   with open(tag_path, "w") as myfile:
     myfile.write("\n".join(pages))
-  print(tag, get_pages_with_tag(tag))
+  print(tag, get_paths_with_tag(tag))
 
 def get_tag_path(tag):
   '''Get the source path associated with a tag name.'''
