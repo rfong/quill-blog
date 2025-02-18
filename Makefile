@@ -1,6 +1,6 @@
 watch: static
 	# Run build script
-	python3 build.py
+	python build.py
 
 static:
 	# Copy over static files
