@@ -1,3 +1,1 @@
-# index page
-
-hello world!
+hello world! I am a blurb in `index.md`.

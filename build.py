@@ -38,6 +38,11 @@ COLLECT_CATEGORIES = ["posts", "pages"]
 TIME_STRF = "%Y-%m-%d"
 
 ########################################
+# Globals (use sparingly)
+
+site_config = {}
+
+########################################
 # Staticjinja callbacks -- rendering and context annotation
 
 markdowner = markdown.Markdown(
@@ -81,6 +86,7 @@ def md_context(template, norender=False):
   context.update({
     "date": context.get("date", get_file_date(template)),
     "category": get_page_category(template),
+    "site_title": site_config.get("title"),
   })
   return context
 
@@ -146,6 +152,10 @@ def render_tag(site, template, **kwargs):
 
 ########################################
 # Blog-structure-aware helpers
+
+def load_config():
+  '''Load the config file.'''
+  return yaml.safe_load(Path("_config.yml").read_text())
 
 def rerender(srcPath):
   '''Manually re-render a template.'''
@@ -305,6 +315,8 @@ if __name__ == "__main__":
     shutil.copytree("public", BUILD_DIR + "/public")
   except FileNotFoundError:
     pass
+
+  site_config = load_config()
 
   # Build site
   site = Site.make_site(

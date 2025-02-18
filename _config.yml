@@ -1,0 +1,5 @@
+title: Example longform blog
+baseurl: /
+
+feed:
+  path: feed.xml

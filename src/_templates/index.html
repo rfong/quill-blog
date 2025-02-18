@@ -1,5 +1,9 @@
 {% extends "_templates/wrapper.html" %}
 {% block wrapped_content %}
+  {% if site_title %}
+    <h1 class="title">{{site_title}}</h1>
+  {% endif %}
+
   {{ post_content_html }}
 
   {% for page in pages | sort(attribute="date", reverse=true) %}
