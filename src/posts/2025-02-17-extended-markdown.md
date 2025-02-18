@@ -9,11 +9,6 @@ title: Footnotes, code blocks, other Markdown extended syntax
 
 (use `[TOC]` in markdown to generate a table of contents)
 
-### References
-
-- [Markdown extended syntax guide](https://www.markdownguide.org/extended-syntax/)
-- [Python-Markdown extensions](https://python-markdown.github.io/extensions/) (allows you to write [custom extensions](https://python-markdown.github.io/extensions/api/))
-
 ### Footnote
 
 Here's a simple footnote.[^1]
@@ -37,6 +32,11 @@ First Header  | Second Header
 ------------- | -------------
 Content Cell  | Content Cell
 Content Cell  | Content Cell
+
+### References
+
+- [Markdown extended syntax guide](https://www.markdownguide.org/extended-syntax/)
+- [Python-Markdown extensions](https://python-markdown.github.io/extensions/) (allows you to write [custom extensions](https://python-markdown.github.io/extensions/api/))
 
 
 [^1]: This is the first footnote.

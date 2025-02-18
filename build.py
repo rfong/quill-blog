@@ -33,7 +33,7 @@ TAG_STRIP_REGEX = re.compile("[\s\"\'\(\)\+\,\-\/\:\;\<\=\>\[\]\_\`\{\|\}\~\/\!\
 
 markdowner = markdown.Markdown(
   output_format="html5",
-  extensions=["extra", "admonition", "codehilite", "sane_lists", "smarty", "toc"],
+  extensions=["extra", "admonition", "codehilite", "nl2br", "sane_lists", "smarty", "toc"],
 )
 
 def tag_context(template):
