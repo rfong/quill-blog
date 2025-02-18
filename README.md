@@ -1,9 +1,8 @@
 Quill is a lightweight, minimal, statically compiled blogging framework 
-written in Python on top of staticjinja. Implements markdown -> HTML, tag 
-collection, post categories, RSS feed, and some other small convenience 
-features.
-[Extended Markdown syntax](https://www.markdownguide.org/extended-syntax/) 
-is supported.
+written in Python on top of staticjinja. Implements tag collection, post 
+categories, RSS feed, and some other small convenience features I wanted. 
+Very not productionized. 
+Supports [extended Markdown syntax](https://www.markdownguide.org/extended-syntax/).
 
 - [`staticjinja`](https://staticjinja.readthedocs.io/) for static compilation/watching
 - [Jinja](https://jinja.palletsprojects.com/en/stable/) for templating
