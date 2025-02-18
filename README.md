@@ -24,6 +24,8 @@ pip install -r requirements.txt  # install requirements
 - `make watch`: compile with autoreload
 - `make serve`: serve rendered files on port 8080
 - `make test`: run unit tests
+- `make static`: copy over static files
+- `make daily title=my-post-title`: generate a new dated post without having to type out the date
 
 Build settings can be found in `build.py`.
 

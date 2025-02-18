@@ -12,3 +12,7 @@ serve:
 
 test:
 	python -m unittest
+
+# usage: `make daily title=my-title`
+daily:
+	./make_daily.sh $(title)
