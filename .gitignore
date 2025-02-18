@@ -1,2 +1,6 @@
 venv/
 src/tags/
+__pycache__
+*/__pycache__
+*.swp
+*.swo
