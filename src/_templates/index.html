@@ -1,6 +1,13 @@
 {% extends "_templates/wrapper.html" %}
 {% block wrapped_content %}
   {{ post_content_html }}
+
+  {% for page in pages | sort(attribute="date", reverse=true) %}
+    <div class="post-summary">
+      <a href="/{{page.url}}">{{page.title}}</a>
+    </div>
+  {% endfor %}
+
   <h2>Posts</h2>
   {% for post in posts | sort(attribute="date", reverse=true) %}
     <div class="post-summary">
@@ -8,4 +15,5 @@
       <span class="date">- {{ post.date | strftime }}</span>
     </div>
   {% endfor %}
+
 {% endblock %}

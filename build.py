@@ -31,6 +31,8 @@ FILE_DATE_REGEX = re.compile("(\d{4}-\d{2}-\d{2}).*\..*")
 # support other languages.
 TAG_STRIP_REGEX = re.compile("[\s\"\'\(\)\+\,\-\/\:\;\<\=\>\[\]\_\`\{\|\}\~\/\!\@\#\$\%\^\&\*\.\?]+")
 
+# Categories of markdown objects to collect for the index page
+COLLECT_CATEGORIES = ["posts", "pages"]
 
 ########################################
 # Staticjinja callbacks -- rendering and context annotation
@@ -81,18 +83,20 @@ def md_context(template, norender=False):
 
 def index_context(template):
   '''Return additional context-aware metadata for index page.'''
-  srcPaths = [
-    path.removeprefix(SRC_DIR + "/")
-    for path in glob.glob(SRC_DIR + "/posts/*.md")]
-  posts = [
-    dict(
-      **{"url": get_build_path(path)},
-      **md_context(site.get_template(path), norender=True),
-    ) for path in srcPaths
-  ]
-  return {
-    "posts": posts,
-  }
+  data = {}
+  for cat in COLLECT_CATEGORIES: 
+    # Grab all markdown source paths in this category
+    srcPaths = [
+      path.removeprefix(SRC_DIR + "/")
+      for path in glob.glob(SRC_DIR + "/%s/*.md" % cat)]
+    # Build the metadatas
+    data[cat] = [
+      dict(
+        **{"url": get_build_path(path)},
+        **md_context(site.get_template(path), norender=True),
+      ) for path in srcPaths
+    ]
+  return data
 
 def render_md(site, template, **kwargs):
   '''Markdown to HTML render'''
