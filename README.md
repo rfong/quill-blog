@@ -1,6 +1,6 @@
-A lightweight, minimal, statically compiled blog framework on top of 
+Quill is a lightweight, minimal, statically compiled blog framework on top of 
 staticjinja. Implements tag collection, post categories, and some other small 
-convenience features. 
+convenience features.
 [Extended Markdown syntax](https://www.markdownguide.org/extended-syntax/) 
 is supported.
 
@@ -21,22 +21,28 @@ pip install -r requirements.txt  # install requirements
 
 # Usage
 
+## Make targets
+
 - `make watch`: compile with autoreload
 - `make serve`: serve rendered files on port 8080
 - `make test`: run unit tests
 - `make static`: copy over static files
 - `make daily title=my-post-title`: generate a new dated post without having to type out the date
 
-Build settings can be found in `build.py`.
+Note: Static file watching has been deprecated in `staticjinja` and I have not 
+had time to implement my own static file watcher yet. So to copy over static 
+files to the build dir, you can either manually restart `make watch` or 
+manually run `make static`. Yes, it's janky.
+
+## Structure
 
 - `src/` - source files
 - `build/` - rendered for web
 - `public/` - static source files
 
-Static file watching has been deprecated in `staticjinja` and I have not had 
-time to implement my own static file watcher yet. So to copy over static files 
-to the build dir, you can either manually restart `make watch` or manually 
-run `make static`.
+Build settings can be found in `build.py`.
+
+A bit of minimal site config is in `_config.yml`.
 
 ## Markdown compilation and HTML templates
 Markdown files are automatically categorized by subdirectory, and compiled to 
@@ -51,20 +57,11 @@ if no other template is specified.
 
 ## Front matter (title, tags, etc)
 YAML front matter is parsed out of the tops of Markdown source files with 
-`PyYAML`.
-
-```
----
-title: The title of my post!
-tags: tag1, tag2, tag with spaces and cAsEs, tag!with!punctuation!!
----
-
-body of post
-```
+`PyYAML`. Look in `src/posts` for examples.
 
 ## Post dates
-Post dates are parsed out of markdown basenames if present in `%Y-%m-%d` 
-format, for example `2025-02-03-my-post.md`.
+Post dates are parsed out of markdown basename prefixes if present in 
+`%Y-%m-%d` format, for example `2025-02-03-my-post.md`.
 
 ## Tags
 `tags` are automatically parsed from YAML front matter and compiled to 
@@ -76,7 +73,9 @@ As an intermediate build step, `render_md(...)` generates tag files in
 `tags.html` template.
 
 Note that the approach is lazy about cleanup, and will not delete empty tag 
-files on render autoreload. For a clean build, quit and rerun `make watch`.
+files on render autoreload, since this doesn't matter until it's time to push 
+your changes anyway. For a clean build, quit and rerun `make watch`.
+
 
 # Miscellaneous notes
 
@@ -95,3 +94,7 @@ Regenerate with:
 ```
 pygmentize -S default -f html -a .codehilite >> public/codehilite.css
 ```
+
+# Todo
+
+- [ ] Clean up the CSS files with Sass
