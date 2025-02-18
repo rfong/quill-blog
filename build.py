@@ -16,6 +16,9 @@ import yaml  # PyYAML
 ########################################
 # Constants
 
+SRC_DIR = "src"
+BUILD_DIR = "build"
+
 # YAML front matter separator
 YAML_SEP = "---\n"
 
@@ -78,8 +81,8 @@ def md_context(template, norender=False):
 def index_context(template):
   '''Return additional context-aware metadata for index page.'''
   srcPaths = [
-    path.removeprefix("src/")
-    for path in glob.glob("src/posts/*.md")]
+    path.removeprefix(SRC_DIR + "/")
+    for path in glob.glob(SRC_DIR + "/posts/*.md")]
   posts = [
     dict(
       **{"url": get_build_path(path)},
@@ -210,8 +213,8 @@ def get_relative_path(path):
   '''
   Get path relative to either the source or build directory.
   '''
-  return path.removeprefix(os.getcwd()+"/src/")\
-    .removeprefix(os.getcwd()+"/build/")
+  return path.removeprefix(os.getcwd() + "/%s/" % SRC_DIR)\
+    .removeprefix(os.getcwd() + "/%s/" % BUILD_DIR)
 
 def associate_page_tag(srcPath, tag):
   '''
@@ -232,7 +235,7 @@ def associate_page_tag(srcPath, tag):
 
 def get_tag_path(tag):
   '''Get the source path associated with a tag name.'''
-  return "src/tags/{0}.txt".format(tag)
+  return SRC_DIR + "/tags/{0}.txt".format(tag)
 
 def get_page_category(template):
   '''The page category is the name of the first subdirectory'''
@@ -285,22 +288,22 @@ def strftime_filter(value, format="%Y %B %d"):
 if __name__ == "__main__":
   # Pre-delete auto-compiled directories
   try:
-    print("Cleaning build/ ...")
-    shutil.rmtree("build")
-    print("Cleaning src/tags/ ...")
-    shutil.rmtree("src/tags")
-    os.makedirs("src/tags", exist_ok=True)
+    print("Cleaning %s/ ..." % BUILD_DIR)
+    shutil.rmtree(BUILD_DIR)
+    print("Cleaning %s/tags/ ..." % SRC_DIR)
+    shutil.rmtree(SRC_DIR + "/tags")
+    os.makedirs(SRC_DIR + "/tags", exist_ok=True)
     print("Copying public/ ...")
-    shutil.copytree("public", "build/public")
+    shutil.copytree("public", BUILD_DIR + "/public")
   except FileNotFoundError:
     pass
 
   # Build site
   site = Site.make_site(
     # Template directory
-    searchpath="src",
+    searchpath=SRC_DIR,
     # Output path
-    outpath="build",
+    outpath=BUILD_DIR,
     # File specific contexts.
     # If there are multiple matches, the last regex wins.
     contexts=[
