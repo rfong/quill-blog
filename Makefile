@@ -1,6 +1,11 @@
-watch:
-	cp -r public build
+watch: static
+	# Run build script
 	python3 build.py
+
+static:
+	# Copy over static files
+	rm -r build/public
+	cp -r public build
 
 serve:
 	python3 -m http.server --directory build 8080
