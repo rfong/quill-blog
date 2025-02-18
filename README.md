@@ -108,3 +108,4 @@ pygmentize -S default -f html -a .codehilite > public/codehilite.css
 - [ ] clean up the CSS files with Sass
 - [ ] there's probably a better way to do static compilation
 - [ ] static file watcher
+- [ ] support image preview for posts
