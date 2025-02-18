@@ -79,10 +79,9 @@ def md_context(template, norender=False):
     markdowner.reset()
 
   context.update({
-    "date": get_date(template),
+    "date": context.get("date", get_file_date(template)),
     "category": get_page_category(template),
   })
-  print("DATE for %s:" % template.name, get_date(template))
   return context
 
 def index_context(template):
@@ -261,19 +260,15 @@ def get_build_path(templateName):
 ########################################
 # Simple helpers
 
-def get_date(template):
-  '''Get timestamp associated with template'''
-  # 1. see if a datetime is defined in YAML front matter
-  front_matter = get_front_matter(template.filename)
-  if front_matter and "date" in front_matter:
-    return front_matter["date"]
-  # 2. as fallback, try to get timestamp from filename
+def get_file_date(template):
+  '''Get timestamp associated with file'''
+  # try to parse timestamp from filename
   match = re.match(FILE_DATE_REGEX, template.filename.split("/")[-1])
   if match:
     # parse the first capture group
     return datetime.datetime.strptime(match[1], "%Y-%m-%d")
   else:
-    # 3. as fallback, attempt to get file creation timestamp
+    # as second fallback, attempt to get file creation timestamp
     template_mtime = os.path.getctime(template.filename)
     return datetime.datetime.fromtimestamp(template_mtime)
 
