@@ -18,6 +18,7 @@ import yaml  # PyYAML
 
 SRC_DIR = "src"
 BUILD_DIR = "build"
+TEMPLATES_DIR = "_templates"  # relative to SRC_DIR
 
 # YAML front matter separator
 YAML_SEP = "---\n"
@@ -101,12 +102,12 @@ def render_md(site, template, **kwargs):
   # Get output filepath
   out = Path(os.path.join(site.outpath, get_build_path(template.name)))
 
-  # Template = _templates/{category}.html, or _templates/index.html if none
+  # Template will be {category}.html, or index.html if none
   pgCat = get_page_category(template)
   templateName = ( \
-    "_templates/{0}.html".format(get_page_category(template)) \
+    TEMPLATES_DIR + "/{0}.html".format(get_page_category(template)) \
     if pgCat else \
-    "_templates/index.html" \
+    TEMPLATES_DIR + "/index.html" \
   )
 
   # Compile and stream the result
@@ -132,7 +133,7 @@ def render_tag(site, template, **kwargs):
 
   # Compile and stream the result
   os.makedirs(out.parent, exist_ok=True)
-  site.get_template("_templates/tags.html").stream(**kwargs)\
+  site.get_template(TEMPLATES_DIR + "/tags.html").stream(**kwargs)\
     .dump(str(out), encoding="utf-8")
 
 
