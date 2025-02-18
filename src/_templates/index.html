@@ -17,6 +17,7 @@
     <div class="post-summary">
       <a href="{{post.url}}">{{post.title}}</a>
       <span class="date">- {{ post.date | strftime }}</span>
+      <div class="post-description">{{post.description}}</div>
     </div>
   {% endfor %}
 

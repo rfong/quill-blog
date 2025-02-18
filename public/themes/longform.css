@@ -34,7 +34,7 @@ h1, h2, h3, h4, h5, h6, h7 {
   line-height: 1em;
   color: #666;
 }
-h1.post-title {
+h1.post-title, h1.title {
   color: #000;
 }
 
@@ -55,13 +55,21 @@ body {
   font-size: 20px;
 }
 
-h1.post-title {
+h1.post-title, h1.title {
   margin-block-end: 0.25em;
 }
 
 .date, .tags {
   font-style: italic;
   color: #999;
+  margin-bottom: 0.67em;
+}
+
+.post-description {
+  font-style: italic;
+}
+
+.post-summary {
   margin-bottom: 0.67em;
 }
 

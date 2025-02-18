@@ -1,1 +1,1 @@
-Quill is a lightweight, minimal, statically compiled blog framework written in Python on top of `staticjinja`. Implements tag collection, post categories, and some other small convenience features I wanted without bloatware attached.
+Quill is a lightweight, minimal, statically compiled blog framework written in Python on top of `staticjinja`. Implements markdown -> HTML, tag collection, post categories, and some other small convenience features I wanted without bloatware attached.

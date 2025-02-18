@@ -17,7 +17,7 @@
 <item>
 <title>Post with date in the front matter</title>
 <link>https://localhost:8080/posts/yaml-date.html</link>
-<description></description>
+<description>Because sometimes you need to cheat and backdate a post</description>
 </item>
 
 <item>
@@ -29,7 +29,7 @@
 <item>
 <title>Post with no date</title>
 <link>https://localhost:8080/posts/no-date.html</link>
-<description></description>
+<description>In which `os` proceeds to incorrectly interpolate the file created timestamp</description>
 </item>
 
 
