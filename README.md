@@ -80,6 +80,10 @@ your changes anyway. For a clean build, quit and rerun `make watch`.
 
 # Miscellaneous notes
 
+## "Deploy"
+
+For GH pages: `git subtree push --prefix build origin gh-pages`
+
 ## Compress font files for web
 
 ```
