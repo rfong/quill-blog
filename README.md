@@ -98,7 +98,7 @@ The [CodeHilite Python-Markdown extension](https://python-markdown.github.io/ext
 
 Regenerate with:
 ```
-pygmentize -S default -f html -a .codehilite >> public/codehilite.css
+pygmentize -S default -f html -a .codehilite > public/codehilite.css
 ```
 
 # Todo
