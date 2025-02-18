@@ -24,7 +24,7 @@ pip install -r requirements.txt  # install requirements
 
 ## Make targets
 
-- `make watch`: compile with autoreload
+- `env=DEV make watch`: compile with autoreload; set `env=GH` if deploying to GH Pages
 - `make serve`: serve rendered files on port 8080
 - `make test`: run unit tests
 - `make static`: copy over static files
@@ -43,7 +43,7 @@ manually run `make static`. Yes, it's janky.
 
 Build settings can be found in `build.py`.
 
-A bit of minimal site config is in `_config.yml`.
+A bit of minimal site config is in `config_{ENV}.yml`.
 
 ## Markdown compilation and HTML templates
 Markdown files are automatically categorized by subdirectory, and compiled to 

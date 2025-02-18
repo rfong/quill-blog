@@ -10,31 +10,31 @@
 
 <item>
 <title>Tags and dates</title>
-<link>https://localhost:8080/posts/2025-02-04-tags-and-dates.html</link>
+<link>https://localhost:8080//posts/2025-02-04-tags-and-dates.html</link>
 <description>Post with lots of tags. Also date in filename.</description>
 </item>
 
 <item>
 <title>Post with date in the front matter</title>
-<link>https://localhost:8080/posts/yaml-date.html</link>
+<link>https://localhost:8080//posts/yaml-date.html</link>
 <description>Because sometimes you need to cheat and backdate a post</description>
 </item>
 
 <item>
 <title>image test</title>
-<link>https://localhost:8080/posts/2025-02-18-image.html</link>
+<link>https://localhost:8080//posts/2025-02-18-image.html</link>
 <description>here's an image</description>
 </item>
 
 <item>
 <title>Extended Markdown</title>
-<link>https://localhost:8080/posts/2025-02-17-extended-markdown.html</link>
+<link>https://localhost:8080//posts/2025-02-17-extended-markdown.html</link>
 <description>Footnotes, code blocks, table of contents, tables</description>
 </item>
 
 <item>
 <title>Post with no date</title>
-<link>https://localhost:8080/posts/no-date.html</link>
+<link>https://localhost:8080//posts/no-date.html</link>
 <description>In which `os` proceeds to incorrectly interpolate the file created timestamp</description>
 </item>
 

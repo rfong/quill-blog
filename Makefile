@@ -1,10 +1,11 @@
+# usage: `env=DEV make watch`, `env=GH make watch`, etc.
 watch: static
 	# Run build script
 	python build.py
 
 static:
 	# Copy over static files
-	rm -r build/public
+	rm -rf build/public
 	cp -r public build
 
 serve:

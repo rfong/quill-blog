@@ -1,0 +1,6 @@
+title: quill-blog
+url: https://localhost:8080/
+baseurl: ''
+description: This is a longform theme example for my lightweight blogging framework.
+
+feed: feed.xml

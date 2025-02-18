@@ -2,6 +2,7 @@
 ### Build `staticjinja` site with markdown to html conversion.
 
 import datetime
+from enum import Enum
 import glob
 import os
 from pathlib import Path
@@ -37,6 +38,10 @@ COLLECT_CATEGORIES = ["posts", "pages"]
 # strftime format for yaml
 TIME_STRF = "%Y-%m-%d"
 
+class Env(Enum):
+  DEV = 1
+  GH = 2
+
 ########################################
 # Globals (use sparingly)
 
@@ -59,6 +64,7 @@ def tag_context(template):
   return {
     "tag": tag,
     "tagged_pages": get_pages_with_tag(tag),
+    "siteConfig": site_context(),
   }
 
 def md_context(template, norender=False):
@@ -96,6 +102,7 @@ def site_context():
     "description": site_config.get("description"),
     "url": site_config.get("url") + site_config.get("baseurl"),
     "domain": site_config.get("url"),
+    "baseurl": site_config.get("baseurl"),
   }
 
 def rss_context(template):
@@ -182,7 +189,12 @@ def render_tag(site, template, **kwargs):
 
 def load_config():
   '''Load the config file.'''
-  return yaml.safe_load(Path("_config.yml").read_text())
+  env = getEnv()
+  print("ENV:", env)
+  fname = "config_DEV.yml"
+  if env == Env.GH:
+    fname = "config_GH.yml"
+  return yaml.safe_load(Path(fname).read_text())
 
 def rerender(srcPath):
   '''Manually re-render a template.'''
@@ -297,15 +309,21 @@ def get_build_path(templateName):
 def get_url(templateName):
   '''
   Get the relative URL of a rendered page.
-  For example, index.md will render to {{baseurl}}/index.html.
+  For example, index.md will render to index.html.
   '''
   return os.path.join(
-    site_config.get("baseurl", "/"),
+    "/" + site_config.get("baseurl", "/"),
     get_relative_path(get_build_path(templateName)),
   )
 
 ########################################
 # Simple helpers
+
+def getEnv():
+  '''Get `env` env var (dev, prod, etc)'''
+  if os.getenv("env") == "GH":
+    return Env.GH
+  return Env.DEV
 
 def get_file_date(template):
   '''Get timestamp associated with file'''

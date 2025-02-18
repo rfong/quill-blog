@@ -1,6 +1,6 @@
 title: quill-blog
-url: https://rfong.github.io
-baseurl: /quill-blog
+url: https://rfong.github.io/
+baseurl: 'quill-blog/'
 description: This is a longform theme example for my lightweight blogging framework.
 
 feed: feed.xml
