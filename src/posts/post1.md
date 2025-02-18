@@ -1,10 +1,11 @@
 ---
 tags: tag1
+title: Post 1!
 ---
 
-# Post Title
-
 Here's some nice stuff that you want to blog about!
+
+# section
 
 - Let's
 - make

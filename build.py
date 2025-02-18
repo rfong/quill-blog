@@ -2,6 +2,7 @@
 ### Build `staticjinja` site with markdown to html conversion.
 
 import datetime
+import glob
 import os
 from pathlib import Path
 import re
@@ -12,6 +13,12 @@ from staticjinja import Site
 import yaml  # PyYAML
 
 
+########################################
+# Constants 
+
+# YAML front matter separator
+YAML_SEP = "---\n"
+
 # Matches a file prepended with %Y-%m-%d date, e.g. 2025-02-03-file.md
 FILE_DATE_REGEX = re.compile("(\d{4}-\d{2}-\d{2}).*\..*")
 
@@ -20,39 +27,15 @@ FILE_DATE_REGEX = re.compile("(\d{4}-\d{2}-\d{2}).*\..*")
 # support other languages.
 TAG_STRIP_REGEX = re.compile("[\s\"\'\(\)\+\,\-\/\:\;\<\=\>\[\]\_\`\{\|\}\~\/\!\@\#\$\%\^\&\*\.\?]+")
 
+
+########################################
+# Staticjinja callbacks -- rendering and context annotation
+
 markdowner = markdown.Markdown(output_format="html5")
-
-def get_file_date(template):
-  '''Get timestamp associated with file'''
-  # try to get timestamp from filename if it exists
-  match = re.match(FILE_DATE_REGEX, template.filename.split("/")[-1])
-  if match:
-    # parse the first capture group
-    return datetime.datetime.strptime(match[1], "%Y-%m-%d")
-  else:
-    # as fallback, get timestamp from last file modified date
-    template_mtime = os.path.getmtime(template.filename)
-    return datetime.datetime.fromtimestamp(template_mtime)
-
-def get_pages_with_tag(tag):
-  '''Return the list of pages associated with a tag.'''
-  with open(get_tag_path(tag), "r") as tagfile:
-    return [
-      x.strip()
-      for x in tagfile.readlines()
-      if x
-    ]
-    '''
-    list(filter(
-      lambda x: x,
-      Path(template.filename).read_text().split("\n")
-    ))
-    '''
 
 def tag_context(template):
   '''Return context_aware metadata to annotate onto tag pages.'''
   tag = get_basename_without_ext(template.name)
-
   return {
     "tag": tag,
     "tagged_pages": get_pages_with_tag(tag),
@@ -61,84 +44,34 @@ def tag_context(template):
 def md_context(template):
   '''Return context-aware metadata to annotate onto markdown templates.'''
   content = Path(template.filename).read_text()
-  # Extract YAML front matter, if any
-  YAML_SEP = "---\n"
-  content = content.split(YAML_SEP)
-  context = {}
-  if len(content) >= 3:
-    try:
-      context = parse_front_matter(template, content[1])
-      print("front matter:", context)
-      content = content[2:]
-    except yaml.YAMLError as exc:
-      print("Error while parsing YAML front matter in %s" % template.name)
-      print(exc)
+  context = get_front_matter(template.filename)
+  if context is not None:
+    content = YAML_SEP.join(content.split(YAML_SEP)[2:])
+  else:
+    context = {}
 
-  md_content = YAML_SEP.join(content)
+  if template.name.startswith("index."):
+    context.update(index_context(template))
 
   context.update({
-    "post_content_html": markdowner.convert(md_content),
+    "post_content_html": markdowner.convert(content),
     "date_published": get_file_date(template),
     "category": get_page_category(template),
   })
   return context
 
-def touch_file(path):
-  '''Create an empty file at path'''
-  # Create any nonexistent directories in path
-  basedir = os.path.dirname(path)
-  if not os.path.exists(basedir):
-    os.makedirs(basedir)
-  # Open the file and update the system time
-  with open(path, 'a'):
-    os.utime(path, None)
-
-def parse_front_matter(template, front_matter):
-  '''
-  Clean or parse any front matter that is expected in a specific format.
-  Note that these keys will clobber any other keys in the context!
-  '''
-  data = yaml.safe_load(front_matter)
-  if "tags" in data:
-    # Strip punctuation and replace with hyphens
-    data["tags"] = [
-      re.sub(TAG_STRIP_REGEX, "-", tag.lower())  # also lowercase
-      for tag in data["tags"].split(", ")]
-    # Update tag files
-    for tag in data["tags"]:
-      associate_page_tag(template, tag)
-
-  return data
-
-def get_tag_path(tag):
-  '''Get the source path associated with a tag name.'''
-  return "src/tags/{0}.txt".format(tag)
-
-def associate_page_tag(template, tag):
-  '''Associate a page with a tag.'''
-  tag_path = get_tag_path(tag)
-  touch_file(tag_path)
-  # Get list of currently associated pages
-  pages = get_pages_with_tag(tag)
-  # Add this page and deduplicate
-  pages.append(get_build_path(template))
-  pages = list(set(pages))
-  # Rewrite the tag file with the updated set
-  with open(tag_path, "w") as myfile:
-    myfile.write("\n".join(pages))
-  print(tag, get_pages_with_tag(tag))
-
-def get_page_category(template):
-  '''The page category is the name of the first subdirectory'''
-  path = template.name.split("/")
-  return path[0] if len(path)>1 else None
-
-def get_build_path(template):
-  '''
-  Output path transform, i.e. posts/post1.md -> posts/post1.html
-  Note that this is relative to src/build dir.
-  '''
-  return os.path.splitext(template.name)[0] + ".html"
+def index_context(template):
+  '''Return additional context-aware metadata for index page.'''
+  srcPaths = glob.glob("src/posts/*.md")
+  posts = [
+    dict(
+      **{"url": get_build_path("/".join(path.split("/")[1:]))},
+      **get_front_matter(os.path.join(os.getcwd(), path)),
+    ) for path in srcPaths
+  ]
+  return {
+    "posts": posts,
+  }
 
 def render_md(site, template, **kwargs):
   '''Markdown to HTML render'''
@@ -146,17 +79,23 @@ def render_md(site, template, **kwargs):
   print()
 
   # Get output filepath
-  out = Path(os.path.join(site.outpath, get_build_path(template)))
+  out = Path(os.path.join(site.outpath, get_build_path(template.name)))
 
-  # Template = _{category}.html, or __toplevel.html if no category
-  templateName = "_{0}.html".format(get_page_category(template) or "_toplevel")
+  # Template = _templates/{category}.html, or _templates/index.html if no category
+  pgCat = get_page_category(template)
+  templateName = ( \
+    "_templates/{0}.html".format(get_page_category(template)) \
+    if pgCat else \
+    "_templates/index.html" \
+  )
 
   # Compile and stream the result
   os.makedirs(out.parent, exist_ok=True)
   site.get_template(templateName).stream(**kwargs).dump(str(out), encoding="utf-8")
 
-def get_basename_without_ext(path):
-  return os.path.splitext(os.path.basename(path))[0]
+  # If it's a post, then index.md post index needs to be re-rendered too.
+  if pgCat == "posts":
+    rerender("index.md")
 
 def render_tag(site, template, **kwargs):
   '''Tag page render'''
@@ -170,20 +109,151 @@ def render_tag(site, template, **kwargs):
 
   # Compile and stream the result
   os.makedirs(out.parent, exist_ok=True)
-  site.get_template("_tags.html").stream(**kwargs).dump(str(out), encoding="utf-8")
+  site.get_template("_templates/tags.html").stream(**kwargs).dump(str(out), encoding="utf-8")
+
+
+########################################
+# Blog-structure-aware helpers
+
+def rerender(srcPath):
+  '''Manually re-render a template.'''
+  print("re-render:", srcPath)
+  site.render_templates([site.get_template(srcPath)])
+
+def get_front_matter(filename):
+  '''
+  Parse YAML front matter from a file.
+  Return {} if it was unreadable.
+  Return None if front matter was not defined at all.
+  '''
+  print("get front matter for:", filename)
+  content = Path(filename).read_text()
+  # Extract YAML front matter, if any
+  YAML_SEP = "---\n"
+  content = content.split(YAML_SEP)
+  if len(content) >= 3:
+    try:
+      return parse_front_matter(filename, content[1])
+      print("front matter:", context)
+    except yaml.YAMLError as exc:
+      print("Error while parsing YAML front matter in %s" % filename)
+      print(exc)
+      return {}
+  return None
+
+def parse_front_matter(srcPath, front_matter):
+  '''
+  Clean or parse any front matter that is expected in a specific format.
+  Note that these keys will clobber any other keys in the context!
+  '''
+  data = yaml.safe_load(front_matter)
+  if "tags" in data:
+    # Strip punctuation and replace with hyphens
+    data["tags"] = [
+      re.sub(TAG_STRIP_REGEX, "-", tag.lower())  # also lowercase
+      for tag in data["tags"].split(", ")]
+    # Update tag files
+    for tag in data["tags"]:
+      associate_page_tag(srcPath, tag)
+
+  return data
+
+def get_pages_with_tag(tag):
+  '''
+  Return the list of pages associated with a tag. 
+  Tracked in intermediate file.
+  '''
+  with open(get_tag_path(tag), "r") as tagfile:
+    return [
+      x.strip()
+      for x in tagfile.readlines()
+      if x
+    ]
+    '''
+    list(filter(
+      lambda x: x,
+      Path(template.filename).read_text().split("\n")
+    ))
+    '''
+
+def associate_page_tag(srcPath, tag):
+  '''
+  Associate a page with a tag by writing its name to an intermediate file.
+  '''
+  tag_path = get_tag_path(tag)
+  touch_file(tag_path)
+  # Get list of currently associated pages
+  pages = get_pages_with_tag(tag)
+  # Add this page and deduplicate
+  pages.append(get_build_path(srcPath))
+  pages = list(set(pages))
+  # Rewrite the tag file with the updated set
+  with open(tag_path, "w") as myfile:
+    myfile.write("\n".join(pages))
+  print(tag, get_pages_with_tag(tag))
+
+def get_tag_path(tag):
+  '''Get the source path associated with a tag name.'''
+  return "src/tags/{0}.txt".format(tag)
+
+def get_page_category(template):
+  '''The page category is the name of the first subdirectory'''
+  path = template.name.split("/")
+  return path[0] if len(path)>1 else None
+
+def get_build_path(templateName):
+  '''
+  Output path transform, i.e. posts/post1.md -> posts/post1.html
+  Note that this is relative to src/build dir, does not include src/build.
+  '''
+  return os.path.splitext(templateName)[0] + ".html"
+
+########################################
+# Simple helpers
+
+def get_file_date(template):
+  '''Get timestamp associated with file'''
+  # try to get timestamp from filename if it exists
+  match = re.match(FILE_DATE_REGEX, template.filename.split("/")[-1])
+  if match:
+    # parse the first capture group
+    return datetime.datetime.strptime(match[1], "%Y-%m-%d")
+  else:
+    # as fallback, get timestamp from last file modified date
+    template_mtime = os.path.getmtime(template.filename)
+    return datetime.datetime.fromtimestamp(template_mtime)
+
+def touch_file(path):
+  '''Create an empty file at path'''
+  # Create any nonexistent directories in path
+  basedir = os.path.dirname(path)
+  if not os.path.exists(basedir):
+    os.makedirs(basedir)
+  # Open the file and update the system time
+  with open(path, 'a'):
+    os.utime(path, None)
+
+def get_basename_without_ext(path):
+  return os.path.splitext(os.path.basename(path))[0]
 
 def datetime_format_filter(value, format="%Y %B %d"):
   '''Datetime formatting filter function for Jinja templating.'''
   return value.strftime(format)
 
+
+########################################
+# Main method when run as script
+
 if __name__ == "__main__":
   # Pre-delete auto-compiled directories
   try:
-    print("Cleaning build/...")
+    print("Cleaning build/ ...")
     shutil.rmtree("build")
-    print("Cleaning src/tags/...")
+    print("Cleaning src/tags/ ...")
     shutil.rmtree("src/tags")
     os.makedirs("src/tags", exist_ok=True)
+    print("Copying public/ ...")
+    shutil.copytree("public", "build/public")
   except FileNotFoundError:
     pass
 
