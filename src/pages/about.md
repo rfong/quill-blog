@@ -1,5 +1,5 @@
 ---
-title: about my blog
+title: example page
 ---
 
-this is an about page
+this is an example page
