@@ -19,6 +19,15 @@
   font-style: italic;
 }
 
+.codehilite {
+  font-size: 14.5px;
+  overflow: scroll;
+}
+
+th, td {
+  padding-right: 0.5em;
+}
+
 body {
   /*background-color:#f00;*/
   margin: 0 auto;

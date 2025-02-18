@@ -2,13 +2,14 @@
 <html lang="en">
   <head>
     <title>My Blog</title>
+    <link rel="stylesheet" href="/public/codehilite.css" />
     <link rel="stylesheet" href="/public/themes/longform.css" />
   </head>
   <body>
     
   <a href="/"><< home</a>
   
-  <h1 class="post-title">Footnotes</h1>
+  <h1 class="post-title">Footnotes, code blocks, other Markdown extended syntax</h1>
   <div class="date">2025 February 17</div>
   <div class="tags">tags: 
     
@@ -16,9 +17,53 @@
     
   </div>
   <div class="post-content">
-    <p>Here's a simple footnote.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed leo ante. Sed leo nisl, tristique eu justo eu, consectetur mattis augue. Donec at est enim. Pellentesque cursus efficitur felis, pharetra gravida augue tincidunt vitae. Morbi ac euismod tortor. Quisque euismod erat sit amet est sodales fringilla nec et mauris. Etiam eu volutpat tellus. Aliquam elit sapien, tempor non pulvinar nec, cursus in massa. Aenean viverra enim non odio convallis, vel consequat nisl dapibus. Morbi gravida non nunc accumsan faucibus. In ex mauris, porta quis aliquet eu, posuere at est. Morbi semper imperdiet tristique. Duis varius mi est. Cras lobortis ornare vulputate. Mauris nisl turpis, blandit vel est mattis, pulvinar facilisis orci. In volutpat faucibus ullamcorper.</p>
-<p>Here's a longer footnote.<sup id="fnref:bignote"><a class="footnote-ref" href="#fn:bignote">2</a></sup></p>
+    <h3 id="table-of-contents">Table of contents</h3>
+<div class="toc">
+<ul>
+<li><a href="#table-of-contents">Table of contents</a></li>
+<li><a href="#references">References</a></li>
+<li><a href="#footnote">Footnote</a></li>
+<li><a href="#code-block-with-syntax-highlighting">Code block with syntax highlighting</a></li>
+<li><a href="#table">Table</a></li>
+</ul>
+</div>
+<p>(use <code>[TOC]</code> in markdown to generate a table of contents)</p>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="https://www.markdownguide.org/extended-syntax/">Markdown extended syntax guide</a></li>
+<li><a href="https://python-markdown.github.io/extensions/">Python-Markdown extensions</a> (allows you to write <a href="https://python-markdown.github.io/extensions/api/">custom extensions</a>)</li>
+</ul>
+<h3 id="footnote">Footnote</h3>
+<p>Here&rsquo;s a simple footnote.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>Here&rsquo;s a longer footnote.<sup id="fnref:bignote"><a class="footnote-ref" href="#fn:bignote">2</a></sup></p>
+<h3 id="code-block-with-syntax-highlighting">Code block with syntax highlighting</h3>
+<div class="codehilite"><pre><span></span><code><span class="p">:::</span><span class="n">python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygments.formatters</span><span class="w"> </span><span class="kn">import</span> <span class="n">HtmlFormatter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">markdown.extensions.codehilite</span><span class="w"> </span><span class="kn">import</span> <span class="n">CodeHiliteExtension</span>
+
+<span class="c1"># 79 char line:</span>
+<span class="mi">0123456789012345678901234567890123456789012345678901234567890123456789012345678</span>
+</code></pre></div>
+
+<h3 id="table">Table</h3>
+<table>
+<thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody>
+</table>
 <div class="footnote">
 <hr>
 <ol>
@@ -26,7 +71,7 @@
 <p>This is the first footnote.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 <li id="fn:bignote">
-<p>Here's one with multiple paragraphs and code.</p>
+<p>Here&rsquo;s one with multiple paragraphs and code.</p>
 <p>Indent paragraphs to include them in the footnote.</p>
 <p><code>{ my code }</code></p>
 <p>Add as many paragraphs as you like.&#160;<a class="footnote-backref" href="#fnref:bignote" title="Jump back to footnote 2 in the text">&#8617;</a></p>

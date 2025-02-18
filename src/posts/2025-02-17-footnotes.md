@@ -1,13 +1,42 @@
 ---
 tags: features
-title: Footnotes
+title: Footnotes, code blocks, other Markdown extended syntax
 ---
+
+### Table of contents
+
+[TOC]
+
+(use `[TOC]` in markdown to generate a table of contents)
+
+### References
+
+- [Markdown extended syntax guide](https://www.markdownguide.org/extended-syntax/)
+- [Python-Markdown extensions](https://python-markdown.github.io/extensions/) (allows you to write [custom extensions](https://python-markdown.github.io/extensions/api/))
+
+### Footnote
 
 Here's a simple footnote.[^1]
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed leo ante. Sed leo nisl, tristique eu justo eu, consectetur mattis augue. Donec at est enim. Pellentesque cursus efficitur felis, pharetra gravida augue tincidunt vitae. Morbi ac euismod tortor. Quisque euismod erat sit amet est sodales fringilla nec et mauris. Etiam eu volutpat tellus. Aliquam elit sapien, tempor non pulvinar nec, cursus in massa. Aenean viverra enim non odio convallis, vel consequat nisl dapibus. Morbi gravida non nunc accumsan faucibus. In ex mauris, porta quis aliquet eu, posuere at est. Morbi semper imperdiet tristique. Duis varius mi est. Cras lobortis ornare vulputate. Mauris nisl turpis, blandit vel est mattis, pulvinar facilisis orci. In volutpat faucibus ullamcorper.
-
 Here's a longer footnote.[^bignote]
+
+### Code block with syntax highlighting
+
+```
+:::python
+from pygments.formatters import HtmlFormatter
+from markdown.extensions.codehilite import CodeHiliteExtension
+
+# 79 char line:
+0123456789012345678901234567890123456789012345678901234567890123456789012345678
+```
+
+### Table
+
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
 
 
 [^1]: This is the first footnote.

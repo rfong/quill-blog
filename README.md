@@ -63,3 +63,12 @@ Note that the approach is lazy about cleanup, and will not delete empty tag file
 brew install woff2
 for f in *.otf; do woff2_compress $f; done
 ```
+
+## Syntax highlighting CSS
+
+The [CodeHilite Python-Markdown extension](https://python-markdown.github.io/extensions/code_hilite/) is used for syntax highlighting.
+
+Regenerate with:
+```
+pygmentize -S default -f html -a .codehilite >> public/codehilite.css
+```

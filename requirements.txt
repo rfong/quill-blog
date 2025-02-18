@@ -4,3 +4,11 @@ Markdown==3.7
 MarkupSafe==3.0.2
 staticjinja==5.0.0
 watchdog==6.0.0
+docopt-ng==0.9.0
+Jinja2==3.1.5
+Markdown==3.7
+MarkupSafe==3.0.2
+Pygments==2.19.1
+PyYAML==6.0.2
+staticjinja==5.0.0
+watchdog==6.0.0
