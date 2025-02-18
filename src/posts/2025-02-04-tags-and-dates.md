@@ -1,6 +1,6 @@
 ---
-tags: tag1, tag2, tag3, tag with spaces and cAsES, punct.**uat&&io?!!n
-title: Post with date and lots of tags.
+tags: features, tag with spaces and cAsES, punct.**uat&&io?!!n
+title: Post with lots of tags. Also date in filename.
 ---
 
 ## Date

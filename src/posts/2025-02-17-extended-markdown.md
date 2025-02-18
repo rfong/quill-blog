@@ -1,6 +1,6 @@
 ---
 tags: features
-title: Footnotes, code blocks, other Markdown extended syntax
+title: Footnotes, code blocks, other extended Markdown
 ---
 
 ### Table of contents
