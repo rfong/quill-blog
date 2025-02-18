@@ -101,7 +101,7 @@ def index_context(template):
     # Build the metadatas
     data[cat] = [
       dict(
-        **{"url": get_build_path(path)},
+        **{"url": get_url(path)},
         **md_context(site.get_template(path), norender=True),
       ) for path in srcPaths
     ]
@@ -222,7 +222,7 @@ def get_pages_with_tag(tag):
   print("TAG SOURCE PATHS:", sourcePaths)
   return [
     dict(
-      **{"url": get_relative_path(get_build_path(path))},
+      **{"url": get_url(path)},
       **md_context(site.get_template(path), norender=True),
     ) for path in sourcePaths
   ]
@@ -266,6 +266,16 @@ def get_build_path(templateName):
   Note that this is relative to src/build dir, does not include src/build.
   '''
   return os.path.splitext(templateName)[0] + ".html"
+
+def get_url(templateName):
+  '''
+  Get the relative URL of a rendered page.
+  For example, index.md will render to {{baseurl}}/index.html.
+  '''
+  return os.path.join(
+    site_config.get("baseurl", "/"),
+    get_relative_path(get_build_path(templateName)),
+  )
 
 ########################################
 # Simple helpers
