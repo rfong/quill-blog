@@ -2,11 +2,13 @@
 {% block content %}
   <h1 class="post-title">{{ title }}</h1>
   <div class="date">{{ date | strftime }}</div>
+  {% if tags %}
   <div class="tags">tags: 
     {% for tag in tags %}
       <a class="tag" href="/tag/{{tag}}">{{tag}}</a>
     {% endfor %}
   </div>
+  {% endif %}
   <div class="post-content">
     {{ post_content_html }}
   </div>
