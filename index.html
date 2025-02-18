@@ -11,11 +11,11 @@
     <h1 class="title">Example longform blog</h1>
   
 
-  <p>Quill is a lightweight, minimal, statically compiled blog framework written in Python on top of <code>staticjinja</code>. Implements tag collection, post categories, and some other small convenience features I wanted without bloatware attached.</p>
+  <p>Quill is a lightweight, minimal, statically compiled blog framework written in Python on top of <code>staticjinja</code>. Implements markdown -&gt; HTML, tag collection, post categories, and some other small convenience features I wanted without bloatware attached.</p>
 
   
     <div class="post-summary">
-      <a href="/pages/about.html">example page</a>
+      <a href="/pages/about.html">About page (example)</a>
     </div>
   
 
@@ -24,21 +24,25 @@
     <div class="post-summary">
       <a href="/posts/yaml-date.html">Post with date in the front matter</a>
       <span class="date">- 2025 February 19</span>
+      <div class="post-description">Because sometimes you need to cheat and backdate a post</div>
     </div>
   
     <div class="post-summary">
       <a href="/posts/no-date.html">Post with no date</a>
       <span class="date">- 2025 February 18</span>
+      <div class="post-description">In which `os` proceeds to incorrectly interpolate the file created timestamp</div>
     </div>
   
     <div class="post-summary">
       <a href="/posts/2025-02-17-extended-markdown.html">Extended Markdown</a>
       <span class="date">- 2025 February 17</span>
+      <div class="post-description">Footnotes, code blocks, table of contents, tables</div>
     </div>
   
     <div class="post-summary">
       <a href="/posts/2025-02-04-tags-and-dates.html">Tags and dates</a>
       <span class="date">- 2025 February 04</span>
+      <div class="post-description">Post with lots of tags. Also date in filename.</div>
     </div>
   
 
