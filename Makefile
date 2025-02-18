@@ -7,6 +7,10 @@ build-gh:
 	# Rebuild for GH environment
 	env=GH python build.py
 
+push-gh:
+	# Push build/ subtree to gh-pages branch (very janky)
+	git subtree push --prefix build origin gh-pages
+
 static:
 	# Copy over static files
 	rm -rf build/public
