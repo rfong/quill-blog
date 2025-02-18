@@ -3,7 +3,7 @@
 
 <channel>
 
-<title>Example longform blog</title>
+<title>quill-blog</title>
 <link>https://localhost:8080/</link>
 <description>This is a longform theme example for my lightweight blogging framework.</description>
 
