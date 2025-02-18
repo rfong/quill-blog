@@ -13,7 +13,7 @@ fi
 if [ -f "$fname" ]; then
   echo "$fname already exists."
 else
-  cp src/_templates/post_template.md $fname
+  cp src/_templates/daily_post.md $fname
   echo 'date: '`date +"%Y-%m-%d %H:%M:%S"` >> $fname
   echo "---" >> $fname
   echo "created $fname"
