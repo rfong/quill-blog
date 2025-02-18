@@ -21,6 +21,9 @@ pip install -r requirements.txt  # install requirements
 
 # Usage
 
+To start writing and rendering changes locally, run `make watch` and 
+`make serve`, and edit a Markdown post in `src/posts`.
+
 ## Make targets
 
 - `make watch`: compile with autoreload in dev env
