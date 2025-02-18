@@ -8,7 +8,7 @@ static:
 	cp -r public build
 
 serve:
-	python3 -m http.server --directory build 8080
+	python -m http.server --directory build 8080
 
 test:
 	python -m unittest
