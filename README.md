@@ -4,7 +4,7 @@ Implements tag collection, post categories, RSS feed, and some other small
 convenience features I wanted. Very not productionized. 
 Supports [extended Markdown syntax](https://www.markdownguide.org/extended-syntax/).
 
-- [`staticjinja`](https://staticjinja.readthedocs.io/) for static compilation/watching
+- [`staticjinja`](https://staticjinja.readthedocs.io/) for compilation/watching
 - [Jinja](https://jinja.palletsprojects.com/en/stable/) for templating
 - [Python-Markdown](https://python-markdown.github.io/) for markdown -> HTML
 - [PyYAML](https://pypi.org/project/PyYAML/) for YAML
@@ -27,7 +27,7 @@ To start writing and rendering changes locally, run `make watch` and
 ## Make targets
 
 - `make watch`: compile with autoreload in dev env
-- `make build-gh`: rebuild with gh pages config file. very janky
+- `make build-gh`: rebuild with gh pages config file. do this before deploy. very janky
 - `make serve`: serve rendered files on port 8080
 - `make test`: run unit tests
 - `make static`: copy over static files
